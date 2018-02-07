@@ -639,13 +639,9 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
         stream = self.resolve(item['url'])
         if stream is not None and stream is not False:
             if not 'headers' in stream.keys(): stream['headers'] = {}
-            name = item['title'].replace('/', '_').replace('\\', '_')
+            name = stream['fname']
             if not stream['subs'] == '' and stream['subs'] is not None:
-                sctop.download(stream['subs'], downloads, name + '.srt',
-                               stream['headers'])
-            if name.find('.') <= 0:
-                # name does not contain extension, append some
-                name += '.mp4'
+                sctop.download(stream['subs'], downloads, name + '.srt', stream['headers'])
             from threading import Thread
             util.debug("[SC] mame co stahovat: %s" % str(stream))
             worker = Thread(
