@@ -640,8 +640,17 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
         if stream is not None and stream is not False:
             if not 'headers' in stream.keys(): stream['headers'] = {}
             name = stream['fname']
+
+            if (stream['subs'] == '' or stream['subs'] is None)\
+                    and stream['lang'].strip()[:2] not in ['CZ', 'SK']:
+                stream['subs'] = self.findSubtitles(stream)
+            if stream['subs'] == '' or stream['subs'] == 'internal' or stream['subs'] == 'disabled':
+                stream.remove('subs')
             if not stream['subs'] == '' and stream['subs'] is not None:
-                sctop.download(stream['subs'], downloads, name + '.srt', stream['headers'])
+                sctop.download(stream['subs'], downloads,
+                               name.rsplit('.', 1)[0] + '.srt',
+                               stream['headers'])
+
             from threading import Thread
             util.debug("[SC] mame co stahovat: %s" % str(stream))
             worker = Thread(
