@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<addon id="plugin.video.stream-cinema" name="Stream Cinema CZ a SK" provider-name="bbaron" version="1.2.46">
+<addon id="plugin.video.stream-cinema" name="Better Stream Cinema CZ a SK" provider-name="tprochazka" version="1.2.46.1">
     <requires>
         <import addon="xbmc.python" version="2.14.0" />
         <import addon="script.module.stream.resolver" version="1.6.51" />
@@ -20,7 +20,7 @@
         <summary lang="he">stream-cinema.online - ניגון תוכן מ-webshare.cz[CR]לתפקוד תקין עליך [I]להירשם ב-webshare.cz ולהיות בעל חשבון VIP פעיל[/I].</summary>
         <platform>all</platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
-        <source>https://github.com/bbaronSVK/plugin.video.stream-cinema.git</source>
+        <source>https://github.com/tprochazka/plugin.video.stream-cinema.git</source>
         <assets>
             <icon>icon.png</icon>
             <fanart>fanart.jpg</fanart>

@@ -1,3 +1,7 @@
+[B]1.2.46.1[/B]
+- stahování s originálním názvem podle kterého jde přesně dohledat titulky
+- stahování včetně titulků pokud jsou v době stažení k dispozici
+
 [B]1.2.8[/B]
 - nova cache
 - cachovanie zoznamov v plugine podla casu, ktory posiela server
