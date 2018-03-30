@@ -1963,9 +1963,9 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                         d = defaultdict(lambda: '', r)
                         if d['sinfo'] == True:
                             d['lang'] = '%s+tit' % d['lang']
-                        opts.append('[B][%s] %s%s[/B] - %s%s' %
+                        opts.append('[B][%s] %s%s[/B] - %s (%s)%s' %
                                     (d['olang'], d['quality'], d['vinfo'],
-                                     d['size'], d['ainfo']))
+                                     d['size'], d['sbitrate'], d['ainfo']))
                     ret = dialog.select(resolved[0]['title'], opts)
                     ret = ret if ret != -1 else False
                     del dialog
