@@ -269,9 +269,7 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
             util.debug("[SC] add_item_trakt: %s" % str(params))
             ids = trakt.getList(params['tl'])
             data = self.provider._json(
-                self.provider._url("/Search/"), {
-                    'ids': json.dumps(ids)
-                })
+                self.provider._url("/Search/"), {'ids': json.dumps(ids)})
             if 'menu' in data:
                 error = False
                 new = False
@@ -314,9 +312,8 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
     def add_item_lastrun(self, ids):
         error = False
         new_items = False
-        data = self.provider._json("%s/Lib/multi" % sctop.BASE_URL, {
-            "ids": json.dumps(ids)
-        })
+        data = self.provider._json("%s/Lib/multi" % sctop.BASE_URL,
+                                   {"ids": json.dumps(ids)})
         if data:
             for i in data:
                 (e, n) = self.add_item({'notifi': 1, 'update': True}, data=i)
@@ -464,9 +461,8 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                     'type': 'dir'
                 }
                 out.append(item)
-            self.list(self.provider.items(data={
-                'menu': out
-            }))  #self.provider.search(what, params['id']))
+            self.list(self.provider.items(data={'menu': out})
+                      )  #self.provider.search(what, params['id']))
             pass
         return self.endOfDirectory(cacheToDisc=False)
 
@@ -722,18 +718,14 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
             if action == 'traktWatchlist':
                 if trakt.getTraktCredentialsInfo() == True:
                     self.list(
-                        self.provider.items(data={
-                            'menu': trakt.getLists()
-                        }))
+                        self.provider.items(data={'menu': trakt.getLists()}))
                 else:
                     self.list([])
                 return self.endOfDirectory()
             if action == 'traktHistory':
                 if trakt.getTraktCredentialsInfo() == True:
                     self.list(
-                        self.provider.items(data={
-                            'menu': trakt.getHistory()
-                        }))
+                        self.provider.items(data={'menu': trakt.getHistory()}))
                 else:
                     self.list([])
                 return self.endOfDirectory()
@@ -745,9 +737,8 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                     ids = trakt.getList(params['id'], content)
                     self.list(
                         self.provider.items(
-                            data=self.provider._json("/Search/", {
-                                'ids': json.dumps(ids)
-                            })))
+                            data=self.provider._json(
+                                "/Search/", {'ids': json.dumps(ids)})))
                 return self.endOfDirectory()
             if action == 'authTrakt':
                 trakt.authTrakt()
@@ -862,6 +853,9 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                     'default', '1080p')
                 dialog.doModal()
                 del dialog
+            if action == 'refreshrepo':
+                xbmc.executebuiltin("UpdateAddonRepos()")
+                xbmc.executebuiltin("UpdateLocalAddons()")
             if action == 'test':
                 self.evalSchedules()
                 #data = myPlayer.MyPlayer.executeJSON({'jsonrpc': '2.0', 'id': 0, 'method': 'VideoLibrary.GetMovies', 'params': {'properties': ['title', 'imdbnumber', 'year', 'playcount', 'lastplayed', 'file', 'dateadded', 'runtime', 'userrating']}})
@@ -889,23 +883,24 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
     @bug.buggalo_try_except({'method': 'scutils.setUniq'})
     def setUniq(self, li, stream):
         uniq = {}
-        if 'imdb' in stream and stream['imdb'] == 0:
+        if 'imdb' in stream and int(stream['imdb']) != 0:
             #util.debug("[SC] uniq imdb %s" % stream['imdb'])
-            uniq.update({'imdb': stream['imdb']})
+            imdb = "tt%07d" % int(stream['imdb'])
+            uniq.update({'imdb': imdb})
             li.setProperty('IMDBNumber', stream['imdb'])
-        if 'tmdb' in stream and stream['tmdb'] == 0:
+        if 'tmdb' in stream and int(stream['tmdb']) != 0:
             #util.debug("[SC] uniq tmdb %s" % stream['tmdb'])
             uniq.update({'tmdb': stream['tmdb']})
             li.setProperty('TMDBNumber', stream['tmdb'])
-        if 'tvdb' in stream and stream['tvdb'] == 0:
+        if 'tvdb' in stream and int(stream['tvdb']) != 0:
             #util.debug("[SC] uniq tvdb %s" % stream['tvdb'])
             uniq.update({'tvdb': stream['tvdb']})
             li.setProperty('TVDBNumber', stream['tvdb'])
-        if 'csfd' in stream:
+        if 'csfd' in stream and int(stream['csfd']) < 1000000:
             #util.debug("[SC] uniq csfd %s" % stream['csfd'])
             uniq.update({'csfd': stream['csfd']})
             li.setProperty('CSFDNumber', stream['csfd'])
-        if 'trakt' in stream and stream['trakt'] == 0:
+        if 'trakt' in stream and int(stream['trakt']) != 0:
             #util.debug("[SC] uniq trakt %s" % stream['trakt'])
             uniq.update({'trakt': stream['trakt']})
             li.setProperty('TRAKTNumber', stream['trakt'])
@@ -1009,6 +1004,14 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                     #util.debug("Seturnm titulky: " + str(stream['subs']))
                     li.setSubtitles([stream['subs']])
             except:
+                pass
+
+            try:
+                li.setContentLookup(False)
+                li.setMimeType('application/octet-stream')
+            except Exception as e:
+                util.debug(
+                    "[SC] err content lookup %s" % str(traceback.format_exc()))
                 pass
             self.win.setProperty(sctop.__scriptid__, sctop.__scriptid__)
             util.debug("[SC] mozem zacat prehravat %s" % str(stream))
@@ -1353,7 +1356,6 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
     @bug.buggalo_try_except({'method': 'scutils.service'})
     def service(self):
         util.info("SC Service Started")
-        #dialog = sctop.dialog.textviewer('heading', 'Prosim podporte vyvoj pluginu na adrese: http://stream-cinema.online/')
         if sctop.player is None:
             sctop.player = myPlayer.MyPlayer(parent=self)
         try:
@@ -1415,7 +1417,7 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                     "[SC] upNext [%s] " %
                     str((totalTime - playTime) <= int(notificationtime)))
                 showupnext = sctop.getSettingAsBool("show_up_next")
-                if showupnext and (
+                if showupnext and totalTime > 0 and (
                         totalTime - playTime) <= int(notificationtime):
                     sctop.player.upNext()
         except Exception as e:
@@ -1604,13 +1606,11 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                     ]
 
                 filter += [
-                    i for i in result
-                    if i['SubLanguageID'] == lang and any(
+                    i for i in result if i['SubLanguageID'] == lang and any(
                         x in i['MovieReleaseName'].lower() for x in fmt)
                 ]
                 filter += [
-                    i for i in result
-                    if i['SubLanguageID'] == lang and any(
+                    i for i in result if i['SubLanguageID'] == lang and any(
                         x in i['MovieReleaseName'].lower() for x in quality)
                 ]
                 filter += [i for i in result if i['SubLanguageID'] == lang]
@@ -2003,7 +2003,7 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
                 util.debug("[SC] dialog ret: %s" % str(ret))
                 if ret is not False:
                     util.debug("[SC] dialog resolved url: %s" % str(
-                        resolved[ret]['params']))
+                        resolved[ret]['url']))
                     return resolved[ret]
                 else:
                     util.debug('[SC] None.........')
