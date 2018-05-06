@@ -635,7 +635,8 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
         stream = self.resolve(item['url'])
         if stream is not None and stream is not False:
             if not 'headers' in stream.keys(): stream['headers'] = {}
-            name = stream['fname']
+            # Get the original filename from download link
+            name = stream['url'].rsplit('/', 1)[-1]
 
             if (stream['subs'] == '' or stream['subs'] is None)\
                     and stream['lang'].strip()[:2] not in ['CZ', 'SK']:
