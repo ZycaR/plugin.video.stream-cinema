@@ -102,7 +102,8 @@ class StreamCinemaContentProvider(ContentProvider):
         q.update({
             'uid': self.uid,
             'ver': sctop.API_VERSION,
-            'lang': sctop.KODI_LANG
+            'lang': sctop.KODI_LANG,
+            'v': sctop.addonInfo('version')
         })
         if sctop.getSettingAsBool('filter_audio'):
             q.update({'l': sctop.getSetting('filter_lang.1')})
@@ -195,8 +196,8 @@ class StreamCinemaContentProvider(ContentProvider):
                 int(sys.argv[1]), data["setPluginFanart"])
 
         if cl is False and "version" in data:
-            util.info("[SC] kontrola verzie: %s %s" %
-                      (str(sctop.addonInfo('version')), data["version"]))
+            util.info("[SC] kontrola verzie: %s %s" % (str(
+                sctop.addonInfo('version')), data["version"]))
             if sctop.addonInfo(
                     'version') != data["version"] and sctop.getSetting(
                         'ver') != data['version']:
@@ -208,6 +209,9 @@ class StreamCinemaContentProvider(ContentProvider):
                     pass
                 xbmc.executebuiltin('UpdateAddonRepos')
                 sctop.setSetting('ver', data['version'])
+                sctop.setSetting('ws_checkssl', 'false')
+                sctop.setSetting('check_ssl1', 'false')
+                sctop.setSetting('usecache', 'true')
             if sctop.getSettingAsBool(
                     'cachemigrate'
             ) == '' or sctop.getSettingAsBool('cachemigrate') is False:
@@ -240,8 +244,8 @@ class StreamCinemaContentProvider(ContentProvider):
         return self.items(url)
 
     def _oldapi(self):
-        xbmc.executebuiltin("Container.Update(plugin://%s)" %
-                            (sctop.__scriptid__))
+        xbmc.executebuiltin(
+            "Container.Update(plugin://%s)" % (sctop.__scriptid__))
 
     @bug.buggalo_try_except({'method': 'scinema.get_data_cached'})
     def get_data_cached(self, url, post=False):
@@ -299,8 +303,8 @@ class StreamCinemaContentProvider(ContentProvider):
             return ret
         except Exception as e:
             inet = sctop.getCondVisibility('System.InternetState')
-            util.debug("[SC] inet scinema status: %s | %s" % (str(inet),
-                                                              str(e)))
+            util.debug(
+                "[SC] inet scinema status: %s | %s" % (str(inet), str(e)))
             if inet is False or inet == 0:
                 HANDLE = int(sys.argv[1])
                 xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
@@ -345,7 +349,6 @@ class StreamCinemaContentProvider(ContentProvider):
             if k != 'url':
                 item[k] = m[k]
         item = self.ctx(item, m)
-
         return item
 
     @bug.buggalo_try_except({'method': 'scinema._video_item'})
@@ -359,7 +362,11 @@ class StreamCinemaContentProvider(ContentProvider):
 
     @bug.buggalo_try_except({'method': 'scinema.ctx'})
     def ctx(self, item, data):
-        menu = {}
+        try:
+            from collections import OrderedDict
+            menu = OrderedDict()
+        except ImportError as e:
+            menu = {}
         #util.debug("CTX ITM: %s" % str(item))
         #util.debug("CTX DAT: %s" % str(data))
         #if 'dir' in data and data['dir'] == 'tvshows':
@@ -385,7 +392,52 @@ class StreamCinemaContentProvider(ContentProvider):
                 "$30918": {
                     "action": "add-to-lib-trakt",
                     "tl": item['tl'],
-                    "title": data['title']
+                    "title": data['title'],
+                    'tu': item['tu'] if 'tu' in item else 'me'
+                }
+            })
+
+        if 'list' in item and item['list'] == 'liked':
+            menu.update({
+                "$30977": {
+                    "action": "traktListUnlike",
+                    "title": item['title'],
+                    "tu": item['tu'],
+                    "id": item['id']
+                }
+            })
+        elif 'list' in item and item['tu'] != 'me':
+            menu.update({
+                "$30978": {
+                    "action": "traktListLike",
+                    "title": data['title'],
+                    "tu": item['tu'],
+                    "id": item['id']
+                }
+            })
+
+        if 'list' in item and item['list'] == 'user' and item['tu'] == 'me':
+            menu.update({
+                "$30979": {
+                    'action': 'traktListCustomRemove',
+                    'title': data['title'],
+                    'id': item['id'],
+                }
+            })
+        elif 'list' in item:
+            menu.update({
+                "$30980": {
+                    'action': 'traktListClone',
+                    'title': data['title'],
+                    'id': item['id'],
+                    'tu': item['tu']
+                }
+            })
+            menu.update({
+                "$30981": {
+                    'action': 'traktListAppendToCustom',
+                    'id': item['id'],
+                    'tu': item['tu']
                 }
             })
 
@@ -561,8 +613,8 @@ class StreamCinemaContentProvider(ContentProvider):
                         import re
                         o = urlparse(itm['subs'])
                         g = re.split('/', o[2] if o[5] == '' else o[5])
-                        util.debug("[SC] webshare titulky: %s | %s" %
-                                   (str(g[2]), itm['subs']))
+                        util.debug("[SC] webshare titulky: %s | %s" % (str(
+                            g[2]), itm['subs']))
                         url = self.ws.resolve(g[2])
                         itm['subs'] = url
                         content = sctop.request(url)

@@ -73,8 +73,8 @@ class speedTest():
             for run in range(self.runs):
                 thread = Thread(
                     target=self.downloadthread,
-                    args=(connections[run], '%s?x=%d' % (current_file,
-                                                         int(time() * 1000))))
+                    args=(connections[run],
+                          '%s?x=%d' % (current_file, int(time() * 1000))))
                 thread.run_number = run + 1
                 thread.start()
                 threads.append(thread)
@@ -118,7 +118,7 @@ class speedTest():
         return total_ms
 
     def chooseserver(self):
-        connection = self.connect('www.speedtest.net')
+        connection = self.connect('c.speedtest.net')
         now = int(time() * 1000)
         # really contribute to speedtest.net OS statistics
         # maybe they won't block us again...
