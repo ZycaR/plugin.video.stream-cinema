@@ -33,7 +33,7 @@ def getTrakt(url, post=None, output='content', method=None):
     try:
         use_ssl = sctop.getSettingAsBool('UseSSL')
         url = urlparse.urljoin(
-            'http%s://api.trakt.tv' % 's' if use_ssl else '', url)
+            'http%s://api.trakt.tv' % ('s' if use_ssl else ''), url)
 
         headers = {'trakt-api-key': sctop.trCL, 'trakt-api-version': '2'}
 
@@ -63,7 +63,7 @@ def getTrakt(url, post=None, output='content', method=None):
             else:
                 return (result, code, info)
 
-        oauth = 'http%s://api.trakt.tv/oauth/token' % 's' if use_ssl else ''
+        oauth = 'http%s://api.trakt.tv/oauth/token' % ('s' if use_ssl else '')
         opost = {
             'client_id': sctop.trCL,
             'client_secret': sctop.trSC,
@@ -391,7 +391,8 @@ def getList(slug, content=None, user='me'):
         result = getTrakt('/users/%s/ratings/%s/' % (user, slug[6:]))
         ratings = {}
     elif slug[0:7] == 'watched':
-        result = getTrakt('/users/%s/watched/%s/' % (user, slug[8:]))
+        result = getTrakt(
+            '/users/%s/history/%s/?limit=1000000' % (user, slug[8:]))
         content = slug[8:-1]
     else:
         result = getTrakt(
@@ -402,19 +403,20 @@ def getList(slug, content=None, user='me'):
     types = {'movie': 0, 'show': 3}
     content_type = 'movies'
     for i in result:
-        if i['type'] not in types:
+        item_type = i['type'] if 'type' in i else content
+        if item_type == 'episode':
+            item_type = 'show'
+        if item_type not in types:
             continue
-        if 'type' in i and i['type'] == 'show':
+        if item_type == 'show':
             content_type = 'videos'
-        if 'type' in i and 'trakt' in i[i['type']]['ids']:
-            ids.append(
-                '%d,%d' % (types[i['type']], i[i['type']]['ids']['trakt']))
+
+        if item_type in i and 'trakt' in i[item_type]['ids']:
+            id = '%d,%d' % (types[item_type], i[item_type]['ids']['trakt'])
+            if id not in ids:
+                ids.append(id)
             if ratings != False and 'rating' in i:
-                ratings[i[i['type']]['ids']['trakt']] = i['rating']
-        elif content in i and 'trakt' in i[content]['ids']:
-            ids[types[content]].append(i[content]['ids']['trakt'])
-            if ratings != False and 'rating' in i:
-                ratings[i[content]['ids']['trakt']] = i['rating']
+                ratings[i[item_type]['ids']['trakt']] = i['rating']
         else:
             util.debug('[SC] trakt LIST: %s' % str(i))
     return (content_type, ids, ratings)
