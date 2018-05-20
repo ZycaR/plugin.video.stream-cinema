@@ -267,9 +267,10 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
         if trakt.getTraktCredentialsInfo() == True:
             util.debug("[SC] add_item_trakt: %s" % str(params))
             user = params['tu'] if 'tu' in params else 'me'
-            content_type, ids = trakt.getList(params['tl'], user=user)
+            __, ids, __ = trakt.getList(params['tl'], user=user)
             data = self.provider._json(
-                self.provider._url("/Search/"), {'ids': json.dumps(ids)})
+                self.provider._url("/Search/getTrakt"),
+                {'ids': json.dumps(ids)})
             if 'menu' in data:
                 error = False
                 new = False
@@ -919,6 +920,11 @@ class KODISCLib(xbmcprovider.XBMCMultiResolverContentProvider):
             if action == 'refreshrepo':
                 xbmc.executebuiltin("UpdateAddonRepos()")
                 xbmc.executebuiltin("UpdateLocalAddons()")
+            if action == 'filter':
+                self.list(
+                    self.provider.items(
+                        None, self.provider._json('/Filter/', params)))
+                return self.endOfDirectory(cacheToDisc=False)
             if action == 'test':
                 self.evalSchedules()
                 #data = myPlayer.MyPlayer.executeJSON({'jsonrpc': '2.0', 'id': 0, 'method': 'VideoLibrary.GetMovies', 'params': {'properties': ['title', 'imdbnumber', 'year', 'playcount', 'lastplayed', 'file', 'dateadded', 'runtime', 'userrating']}})
