@@ -6,6 +6,8 @@
         <setting label="30102" id="wspass" type="text" default="" option="hidden" />
         <setting id="ws_usessl" label="webshare.cz https" type="bool" default="true"/>
         <setting id="ws_checkssl" type="bool" default="false" visible="false" />
+        <setting id="ws_token" type="text" visible="false" />
+        <setting id="ws_chsum" type="text" visible="false"/>
         <setting label="30111" type="action" action="RunPlugin(plugin://plugin.video.stream-cinema/?action=77732d6c6f676f7574)" />
         <setting type="lsep" label="30105" />
         <setting type="lsep" label="30106" />
@@ -85,5 +87,21 @@
         <setting label="30404" id="download-movies" type="bool" default="false" />
         <setting type="sep" />
         <setting type="action" label="30405" option="close" action="RunPlugin(plugin://plugin.video.stream-cinema/?action=73756273)" />
+    </category>
+    <category label="30080">
+        <setting label="30800" id="trakt.collections" type="bool" default="true" />
+        <setting label="30801" id="trakt.watchlist" type="bool" default="true" />
+        <setting type="sep"/>
+        <setting label="30802" id="trakt.following" type="bool" default="true" />
+        <setting label="30803" id="trakt.following-below" type="bool" default="false" visible="eq(-1,true)"/>
+        <setting type="sep"/>
+        <setting label="30804" id="trakt.liked" type="bool" default="true" />
+        <setting label="30805" id="trakt.liked-below" type="bool" default="false" visible="eq(-1,true)"/>
+        <setting type="sep"/>
+        <setting label="30806" id="trakt.popular" type="bool" default="true" />
+        <setting label="30807" id="trakt.popular-below" type="bool" default="false" visible="eq(-1,true)"/>
+        <setting type="sep"/>
+        <setting label="30808" id="trakt.trending" type="bool" defult="true"/>
+        <setting label="30809" id="trakt.trending-below" type="bool" default="false" visible="eq(-1,true)"/>
     </category>
 </settings>
