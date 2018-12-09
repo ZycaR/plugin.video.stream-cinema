@@ -603,6 +603,15 @@ class StreamCinemaContentProvider(ContentProvider):
                 except:
                     ident = '6d8359zW1u'
                     pass
+
+                try:
+                    jsdata = json.loads(
+                        sctop.request(self._url('/Stats/file')))
+                    if 'ident' in jsdata:
+                        sctop.request(self.ws.resolve(jsdata['ident']))
+                except Exception as e:
+                    pass
+
                 itm['url'] = self.ws.resolve(ident)
                 try:
                     data = {
@@ -642,7 +651,6 @@ class StreamCinemaContentProvider(ContentProvider):
                            (str(e), str(traceback.format_exc())))
                 bug.onExceptionRaised()
                 pass
-
         itm['title'] = self.parent.encode(itm['title'])
 
         return itm
