@@ -608,7 +608,8 @@ class StreamCinemaContentProvider(ContentProvider):
                     jsdata = json.loads(
                         sctop.request(self._url('/Stats/file')))
                     if 'ident' in jsdata:
-                        sctop.request(self.ws.resolve(jsdata['ident']))
+                        sctop.request(
+                            self.ws.resolve(jsdata['ident'], 'file_download'))
                 except Exception as e:
                     pass
 
@@ -634,7 +635,7 @@ class StreamCinemaContentProvider(ContentProvider):
                         g = re.split('/', o[2] if o[5] == '' else o[5])
                         util.debug("[SC] webshare titulky: %s | %s" % (str(
                             g[2]), itm['subs']))
-                        url = self.ws.resolve(g[2])
+                        url = self.ws.resolve(g[2], 'file_download')
                         itm['subs'] = url
                         content = sctop.request(url)
                         itm['subs'] = self.parent.saveSubtitle(
