@@ -1,6 +1,12 @@
-[B]1.3.8+[/B]
+[B]1.3.13+[/B]
 - stahování s originálním názvem podle kterého jde přesně dohledat titulky
 - stahování včetně titulků pokud jsou v době stažení k dispozici
+
+[B]1.3.13[/B]
+- resolver (cloudflare ochrana)
+- speedtest (mera aj z webshare.cz)
+- statistiky (neposiela donemoty requesty na API)
+- opravene oznacovanie videnych/nevydenych filmov/epizod v KODI 18
 
 [B]1.3.8[/B]
 - upravena praca s ws tokenom
