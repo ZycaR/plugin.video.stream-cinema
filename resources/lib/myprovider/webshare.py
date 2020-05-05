@@ -177,6 +177,9 @@ class Webshare():
 
     def userData(self, all=False):
         self.getToken()
+        if self.token is None:
+            self.login()
+
         if self.token is not None:
             if self._userData is None:
                 headers, req = self._create_request('/', {'wst': self.token})
@@ -197,12 +200,27 @@ class Webshare():
             if not xml.find('status').text == 'OK':
                 self.clearToken()
                 return False
-            if all == True:
+            if all is True:
                 return xml
             util.debug("[SC] userInfo: %s %s" %
                        (xml.find('ident').text, xml.find('vip').text))
             if xml.find('vip').text == '1':
                 xbmcgui.Window(10000).setProperty('ws.vip', '1')
+                try:
+                    t = [
+                        'credits', 'points', 'files', 'bytes', 'score_files',
+                        'score_bytes', 'private_files', 'private_bytes',
+                        'private_space', 'tester', 'role', 'id', 'username',
+                        'email'
+                    ]
+                    j = dict((i, xml.find(i).text) for i in t
+                             if xml.find(i) is not None)
+                    xbmcgui.Window(10000).setProperty('ws.j',
+                                                      str(json.dumps(j)))
+                except Exception as e:
+                    util.debug('[SC] chyba pri natiahnuti dat %s' %
+                               str(traceback.format_exc()))
+
                 try:
                     private_space = int(
                         xml.find('private_space').text) / 1073741824
