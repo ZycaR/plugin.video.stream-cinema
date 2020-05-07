@@ -9,7 +9,7 @@
         <setting id="ws_token" type="text" visible="false" />
         <setting id="ws_chsum" type="text" visible="false"/>
         <setting id="ws_notify" type="text" visible="false"/>
-        <!--setting label="30111" type="action" action="RunPlugin(plugin://plugin.video.stream-cinema/?action=77732d6c6f676f7574)" /-->
+        <!--setting label="30111" type="action" action="RunPlugin(plugin://plugin.video.stream-cinemaZ/?action=77732d6c6f676f7574)" /-->
         <setting type="sep" />
         <setting type="lsep" label="30116" />
         <setting label="30114" type="text" id="kruser" default=""/>
@@ -20,7 +20,7 @@
         <setting type="lsep" label="30106" />
         <setting type="sep" />
         <setting type="lsep" label="30103" />
-        <setting id="trakt.user" type="action" label="30104" option="close" action="RunPlugin(plugin://plugin.video.stream-cinema/?action=617574685472616b74)" />
+        <setting id="trakt.user" type="action" label="30104" option="close" action="RunPlugin(plugin://plugin.video.stream-cinemaZ/?action=617574685472616b74)" />
         <setting id="trakt.token" type="text" option="hidden" visible="false" label="" default="" />
         <setting id="trakt.refresh" type="text" option="hidden" visible="false" label="" default="" />
         <setting type="sep" />
@@ -28,13 +28,13 @@
         <setting id="UseSSL" label="https" type="bool" default="true"/>
         <setting id="check_ssl1" type="bool" default="false" visible="false" />
         <setting label="Pouzit CACHE" id="usecache" type="bool" default="true" visible="false" />
-        <setting type="action" label="30113" action="RunPlugin(plugin://plugin.video.stream-cinema/?action=726566726573687265706f)" />
+        <setting type="action" label="30113" action="RunPlugin(plugin://plugin.video.stream-cinemaZ/?action=726566726573687265706f)" />
         <setting label="" id="cachemigrate" type="bool" default="false" visible="false" />
         <setting label="UID" id="uid" type="text" default="" />
         <setting label="" id="ver" type="text" default="" visible="false" />
     </category>
     <category label="30050">
-        <setting id="speedtest" type="action" label="30500" option="close" action="RunPlugin(plugin://plugin.video.stream-cinema/?action=737065656474657374)" />
+        <setting id="speedtest" type="action" label="30500" option="close" action="RunPlugin(plugin://plugin.video.stream-cinemaZ/?action=737065656474657374)" />
         <setting type="sep" />
         <setting id="bitrate" type="text" default="" visible="false" />
         <setting label="30504" id="bitratefilter" type="bool" default="false" enable="gt(-1,0)" />
@@ -94,7 +94,7 @@
         <setting label="30404" id="download-movies" type="bool" default="false" />
         <setting label="30406" id="download-trakt-watchlist" type="bool" default="false" />
         <setting type="sep" />
-        <setting type="action" label="30405" option="close" action="RunPlugin(plugin://plugin.video.stream-cinema/?action=73756273)" />
+        <setting type="action" label="30405" option="close" action="RunPlugin(plugin://plugin.video.stream-cinemaZ/?action=73756273)" />
     </category>
     <category label="30080">
         <setting label="30800" id="trakt.collections" type="bool" default="true" />

@@ -1,4 +1,4 @@
-# plugin.video.stream-cinema
+# plugin.video.stream-cinemaZ
 kodi plugin pre stream-cinema.online
 
 ## Vylepšená verze oficiálního pluginu od bbaron

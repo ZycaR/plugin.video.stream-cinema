@@ -14,7 +14,7 @@ import xbmcvfs
 import traceback
 import os
 
-__scriptid__ = 'plugin.video.stream-cinema'
+__scriptid__ = 'plugin.video.stream-cinemaZ'
 __scriptname__ = 'stream-cinema.online'
 __addon__ = xbmcaddon.Addon(id=__scriptid__)
 __set__ = __addon__.getSetting

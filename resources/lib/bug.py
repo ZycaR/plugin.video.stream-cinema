@@ -106,7 +106,7 @@ def onExceptionRaised(extraData=None):
         try:
             f = F(
                 xbmc.translatePath(
-                    'special://userdata/addon_data/plugin.video.stream-cinema/settings.xml'
+                    'special://userdata/addon_data/plugin.video.stream-cinemaZ/settings.xml'
                 ))
             sett = f.read(8129 * 10)
             f.close()
